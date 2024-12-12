@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            background-color: #f9f9f9;
+        }
+
+        header, footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: white;
+        }
+
+        header img {
+            height: 80px;
+        }
+
+        footer {
+            justify-content: center;
+        }
+
+        footer img {
+            height: 30px;
+        }
+
+        main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex-grow: 1;
+        }
+
+        .greeting {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .greeting h1 {
+            font-size: 24px;
+            margin: 0;
+            font-weight: bold;
+        }
+
+        .greeting p {
+            font-size: 16px;
+            margin: 5px 0;
+            color: gray;
+        }
+
+        .logout-btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+        }
+
+        .logout-btn:hover {
+            background-color: #45a049;
+        }
+
+        .data-box {
+            flex-grow: 1;
+            width: 90%;
+            background-color: #d3d3d3;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-size: 18px;
+            color: #333;
+            font-weight: bold;
+            border: 2px solid #ccc;
+        }
+    </style>
+    <script>
+        // Automatically log out after session timeout
+        const sessionTimeout = {{ session_timeout_ms | safe }};
+        setTimeout(() => {
+            alert("Your session has expired. You will be logged out.");
+            window.location.href = "{{ url_for('logout') }}";
+        }, sessionTimeout);
+    </script>
+</head>
+<body>
+
+<header>
+    <!-- Top-left logo -->
+<!--    <img src="{{ url_for('static', filename='images/logo.jpg') }}" alt="Logo">-->
+    <img src="/static/images/logo.jpg" alt="logo">
+    <!-- Logout Button -->
+    <button class="logout-btn" onclick="window.location.href='{{ url_for('logout') }}'">Logout</button>
+</header>
+
+<main>
+    <div class="greeting">
+        <h1>{{ greeting_word }}, {{ user_id }}!</h1>
+        <p>That's how you say hello in {{ greeting_language }}.</p>
+    </div>
+
+    <!-- Data box covering the rest of the screen -->
+    <div class="data-box">
+        Data will be displayed here.
+    </div>
+</main>
+
+<footer>
+    <!-- Bottom-center motto -->
+<!--    <img src="{{ url_for('static', filename='images/motto.jpg') }}" alt="Motto">-->
+    <img src="/static/images/motto.jpg" alt="motto">
+</footer>
+
+</body>
+</html>
