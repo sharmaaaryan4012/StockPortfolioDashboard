@@ -4,149 +4,154 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
+
+    <!--
+    I was unable to use "url_for" for the login.html file, therefore, I am not using the styles.css file.
+    -->
+
     <style>
-        body {
-            font-family: Arial, sans-serif;
+        * {
             margin: 0;
             padding: 0;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(to bottom, #DFF5F0, #C1E8DB);
             height: 100vh;
-            background-color: #f9f9f9;
-        }
-
-        header, footer {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 20px;
-            background-color: white;
-        }
-
-        header img {
-            height: 80px;
-        }
-
-        footer {
             justify-content: center;
-        }
-
-        footer img {
-            height: 30px;
-        }
-
-        main {
-            display: flex;
-            flex-direction: column;
             align-items: center;
-            justify-content: center;
-            flex-grow: 1;
+            position: relative;
+            overflow: hidden;
         }
 
-        .greeting {
+        .background-pattern {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        .background-pattern::before,
+        .background-pattern::after {
+            content: '';
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            transform: skew(-20deg);
+        }
+
+        .background-pattern::before {
+            width: 300px;
+            height: 600px;
+            top: -100px;
+            left: -50px;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .background-pattern::after {
+            width: 400px;
+            height: 700px;
+            bottom: -150px;
+            right: -50px;
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .login-container {
+            background-color: #FFFFFF;
+            width: 360px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            padding: 30px;
             text-align: center;
-            margin-bottom: 60px;
+            z-index: 1;
+            position: relative;
         }
 
-        .greeting h1 {
+        .login-container h1 {
+            color: #4CAF50;
             font-size: 24px;
-            margin: 0;
+            margin-bottom: 20px;
             font-weight: bold;
         }
 
-        .form-container {
-            background-color: #d3d3d3;
-            padding: 30px;
-            border-radius: 10px;
-            width: 300px;
-            text-align: center;
-        }
-
-        .form-container input {
-            width: 90%;
+        .login-container .input-field {
+            width: 100%;
             padding: 10px;
             margin: 10px 0;
-            border: 1px solid #ccc;
+            border: 1px solid #CCCCCC;
             border-radius: 5px;
             font-size: 14px;
         }
 
-        .form-container button {
-            width: 95%;
-            padding: 10px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
+        .login-container .input-field:focus {
+            border-color: #4CAF50;
+            outline: none;
         }
 
-        .form-container button:hover {
-            background-color: #45a049;
-        }
+        .login-container .login-button {
+        position: relative;
+        font-family: 'Arial', sans-serif;
+        font-weight: 600;
+        font-size: 16px;
+        letter-spacing: 0.05em;
+        border-radius: 0.8em;
+        cursor: pointer;
+        border: none;
+        background: linear-gradient(to right, #4caf50, #45a049);
+        color: white;
+        overflow: hidden;
+        padding: 0.8em 1.2em;
+        text-align: center;
+        display: inline-block;
+        width: 100%;
+        margin-top: 20px;
+        transition: all 0.4s ease;
+    }
 
-        .tivg-container {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            margin: 0 0;
-        }
+    .login-container .login-button span {
+        position: relative;
+        z-index: 10;
+        transition: color 0.4s;
+        display: inline-block;
+    }
 
-        .tivg-box {
-            width: 90px;
-            height: 60px;
-            background-color: #9D341A;
-            color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 10px;
-            font-weight: bold;
-            transform: skew(-20deg);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
+    .login-container .login-button::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 120%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.1);
+        transform: skew(30deg);
+        transition: transform 0.4s cubic-bezier(0.3, 1, 0.8, 1);
+    }
 
-        .tivg-box:hover {
-            transform: skew(-20deg) scale(1.1);
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
-        }
+    .login-container .login-button:hover::before {
+        transform: translate3d(100%, 0, 0);
+    }
+
+    .login-container .login-button:active {
+        transform: scale(0.95);
+    }
     </style>
 </head>
 <body>
-
-<header>
-    <!-- Top-left logo -->
-    <img src="/static/images/logo.jpg" alt="logo">
-<!--    <img src ="{{ url_for('static', filename='/images/logo.jpg') }}">-->
-    <!-- Interactive TIVG section -->
-    <div class="tivg-container">
-        <div class="tivg-box">TRUST</div>
-        <div class="tivg-box">INTEGRITY</div>
-        <div class="tivg-box">VALUE</div>
-        <div class="tivg-box">GROWTH</div>
-    </div>
-</header>
-
-<main>
-    <div class="greeting">
-        <h1>Welcome to the Konnect Solution's Dashboard</h1>
-    </div>
-
-    <div class="form-container">
-        <form method="POST" action="{{ url_for('login') }}">
-            <input type="text" name="user_id" placeholder="USER ID" required>
-            <input type="password" name="password" placeholder="PASSWORD" required>
-            <button type="submit">Login</button>
+    <div class="background-pattern"></div>
+    <div class="login-container">
+        <h1>Welcome to Konnect Solutions</h1>
+        <form action="/login" method="POST">
+            <input type="text" name="user_id" placeholder="User Name / Email" class="input-field" required>
+            <input type="password" name="password" placeholder="Password" class="input-field" required>
+            <button type="submit" class="login-button">
+                <span>Log In</span>
+            </button>
         </form>
+        <div class="decoration"></div>
+        <div class="decoration-2"></div>
     </div>
-</main>
-
-<footer>
-    <!-- Bottom-center motto -->
-    <img src="/static/images/motto.jpg" alt="motto">
-</footer>
-
 </body>
 </html>
