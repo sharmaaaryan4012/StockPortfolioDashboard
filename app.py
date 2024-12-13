@@ -9,7 +9,7 @@ app = Flask(__name__)
 bcrypt = Bcrypt(app)
 
 app.secret_key = 'supersecretkey'
-app.permanent_session_lifetime = timedelta(minutes=1)
+app.permanent_session_lifetime = timedelta(minutes=15)
 
 # List of greetings in different languages
 GREETINGS = [
