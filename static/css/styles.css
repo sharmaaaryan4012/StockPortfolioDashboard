@@ -1,20 +1,60 @@
-body {
-    font-family: Arial, sans-serif;
+/* Reset and general styling */
+* {
     margin: 0;
     padding: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    height: 100vh;
-    background-color: #f9f9f9;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
 }
 
+body {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    background: linear-gradient(to bottom, #E8F8F5, #DFF5F0);
+    overflow: hidden;
+}
+
+/* Background patterns */
+.background-pattern {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
+
+.background-pattern::before,
+.background-pattern::after {
+    content: '';
+    position: absolute;
+    background: rgba(255, 255, 255, 0.15);
+    transform: skew(-20deg);
+}
+
+.background-pattern::before {
+    width: 300px;
+    height: 600px;
+    top: -100px;
+    left: -50px;
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.background-pattern::after {
+    width: 400px;
+    height: 700px;
+    bottom: -150px;
+    right: -50px;
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* Header and footer styling */
 header, footer {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 10px 20px;
-    background-color: white;
+    background: none;
+    z-index: 1;
 }
 
 header img {
@@ -29,17 +69,18 @@ footer img {
     height: 30px;
 }
 
+/* Main content */
 main {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
     flex-grow: 1;
+    z-index: 1;
 }
 
 .greeting {
     text-align: center;
-    margin-bottom: 60px;
+    margin-bottom: 20px;
 }
 
 .greeting h1 {
@@ -48,60 +89,87 @@ main {
     font-weight: bold;
 }
 
-.form-container {
-    background-color: #d3d3d3;
-    padding: 30px;
-    border-radius: 10px;
-    width: 300px;
-    text-align: center;
-}
-
-.form-container input {
-    width: 90%;
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 14px;
-}
-
-.form-container button {
-    width: 95%;
-    padding: 10px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
+.greeting p {
     font-size: 16px;
-    cursor: pointer;
+    margin: 5px 0;
+    color: gray;
 }
 
-.form-container button:hover {
-    background-color: #45a049;
-}
-
-.tivg-container {
+.data-box {
+    flex-grow: 1;
+    width: 90%;
+    background-color: #ffffff;
+    border-radius: 10px;
     display: flex;
-    justify-content: center;
-    gap: 12px;
-    margin: 0 0;
-}
-
-.tivg-box {
-    width: 90px;
-    height: 60px;
-    background-color: #9D341A;
-    color: white;
-    display: flex;
-    justify-content: center;
     align-items: center;
-    font-size: 10px;
+    justify-content: center;
+    text-align: center;
+    font-size: 18px;
+    color: #333;
     font-weight: bold;
-    transform: skew(-20deg);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    margin: 20px 0;
 }
 
-.tivg-box:hover {
-    transform: skew(-20deg) scale(1.1);
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+/* Logout button */
+
+/*.logout-btn {*/
+/*    background-color: #4CAF50;*/
+/*    color: white;*/
+/*    padding: 10px 20px;*/
+/*    font-size: 16px;*/
+/*    border: none;*/
+/*    border-radius: 5px;*/
+/*    cursor: pointer;*/
+/*    margin: 10px;*/
+/*    transition: background-color 0.3s ease;*/
+/*}*/
+
+/*.logout-btn:hover {*/
+/*    background-color: #45A049;*/
+/*}*/
+
+.logout-btn {
+  position: relative;
+  font-family: 'Arial', sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  letter-spacing: 0.05em;
+  border-radius: 0.8em;
+  cursor: pointer;
+  border: none;
+  background: linear-gradient(to right, #4caf50, #45a049); /* Green gradient */
+  color: white;
+  overflow: hidden;
+  padding: 0.8em 1.2em;
+  text-align: center; /* Ensures text is centered */
+  display: inline-block; /* Maintains proper button styling */
+  width: auto;
+}
+
+.logout-btn span {
+  position: relative;
+  z-index: 10;
+  transition: color 0.4s;
+  display: inline-block;
+}
+
+.logout-btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 120%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.1);
+  transform: skew(30deg);
+  transition: transform 0.4s cubic-bezier(0.3, 1, 0.8, 1);
+}
+
+.logout-btn:hover::before {
+  transform: translate3d(100%, 0, 0);
+}
+
+.logout-btn:active {
+  transform: scale(0.95);
 }
