@@ -31,9 +31,9 @@ GREETINGS = [
 ]
 
 def init_db():
-    with sqlite3.connect('credentials.db') as conn:
+    with sqlite3.connect('data.db') as conn:
         cursor = conn.cursor()
-        cursor.execute('''CREATE TABLE IF NOT EXISTS users (
+        cursor.execute('''CREATE TABLE IF NOT EXISTS credentials (
                             id INTEGER PRIMARY KEY AUTOINCREMENT,
                             user_id TEXT UNIQUE NOT NULL,
                             hashed_password TEXT NOT NULL)''')
@@ -63,9 +63,9 @@ def login():
         user_id = request.form['user_id']
         password = request.form['password']
 
-        with sqlite3.connect('credentials.db') as conn:
+        with sqlite3.connect('data.db') as conn:
             cursor = conn.cursor()
-            cursor.execute("SELECT hashed_password FROM users WHERE user_id = ?", (user_id,))
+            cursor.execute("SELECT hashed_password FROM credentials WHERE user_id = ?", (user_id,))
             result = cursor.fetchone()
 
             if result and bcrypt.check_password_hash(result[0], password):

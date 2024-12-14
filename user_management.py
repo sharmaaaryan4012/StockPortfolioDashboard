@@ -5,10 +5,10 @@ from flask_bcrypt import Bcrypt
 bcrypt = Bcrypt()
 
 def init_db():
-    """Initialize the database and create the users table if it doesn't exist."""
-    with sqlite3.connect('credentials.db') as conn:
+    """Initialize the database and create the credentials table if it doesn't exist."""
+    with sqlite3.connect('data.db') as conn:
         cursor = conn.cursor()
-        cursor.execute('''CREATE TABLE IF NOT EXISTS users (
+        cursor.execute('''CREATE TABLE IF NOT EXISTS credentials (
                             id INTEGER PRIMARY KEY AUTOINCREMENT,
                             user_id TEXT UNIQUE NOT NULL,
                             hashed_password TEXT NOT NULL)''')
@@ -41,10 +41,10 @@ def add_user(user_id, password):
         return
 
     hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
-    with sqlite3.connect('credentials.db') as conn:
+    with sqlite3.connect('data.db') as conn:
         cursor = conn.cursor()
         try:
-            cursor.execute("INSERT INTO users (user_id, hashed_password) VALUES (?, ?)", (user_id, hashed_password))
+            cursor.execute("INSERT INTO credentials (user_id, hashed_password) VALUES (?, ?)", (user_id, hashed_password))
             conn.commit()
             print(f"User {user_id} added successfully.")
         except sqlite3.IntegrityError:
@@ -52,9 +52,9 @@ def add_user(user_id, password):
 
 def remove_user(user_id):
     """Remove a user by their user ID."""
-    with sqlite3.connect('credentials.db') as conn:
+    with sqlite3.connect('data.db') as conn:
         cursor = conn.cursor()
-        cursor.execute("DELETE FROM users WHERE user_id = ?", (user_id,))
+        cursor.execute("DELETE FROM credentials WHERE user_id = ?", (user_id,))
         conn.commit()
         if cursor.rowcount > 0:
             print(f"User {user_id} removed successfully.")
@@ -68,9 +68,9 @@ def reset_password(user_id, new_password):
         return
 
     hashed_password = bcrypt.generate_password_hash(new_password).decode('utf-8')
-    with sqlite3.connect('credentials.db') as conn:
+    with sqlite3.connect('data.db') as conn:
         cursor = conn.cursor()
-        cursor.execute("UPDATE users SET hashed_password = ? WHERE user_id = ?", (hashed_password, user_id))
+        cursor.execute("UPDATE credentials SET hashed_password = ? WHERE user_id = ?", (hashed_password, user_id))
         conn.commit()
         if cursor.rowcount > 0:
             print(f"Password for {user_id} has been reset.")
@@ -78,14 +78,14 @@ def reset_password(user_id, new_password):
             print(f"User {user_id} does not exist.")
 
 def view_users():
-    """View the contents of the users table."""
-    with sqlite3.connect('credentials.db') as conn:
+    """View the contents of the credentials table."""
+    with sqlite3.connect('data.db') as conn:
         cursor = conn.cursor()
-        cursor.execute("SELECT id, user_id FROM users")
-        users = cursor.fetchall()
-        if users:
-            print("\nRegistered Users:")
-            for user in users:
+        cursor.execute("SELECT id, user_id FROM credentials")
+        credentials = cursor.fetchall()
+        if credentials:
+            print("\nRegistered credentials:")
+            for user in credentials:
                 print(f"ID: {user[0]}, User ID: {user[1]}")
         else:
             print("\nNo users found in the database.")
