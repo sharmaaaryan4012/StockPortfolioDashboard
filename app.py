@@ -47,11 +47,18 @@ def session_management():
         last_activity = session.get('last_activity')
         if last_activity:
             last_activity_time = datetime.strptime(last_activity, '%Y-%m-%d %H:%M:%S')
-            if (datetime.now() - last_activity_time) > app.permanent_session_lifetime:
-                session.pop('user_id', None)  # Log out the user
+            elapsed_time = (datetime.now() - last_activity_time).total_seconds()
+            remaining_time = app.permanent_session_lifetime.total_seconds() - elapsed_time
+
+            # If session has expired
+            if remaining_time <= 0:
+                session.pop('user_id', None)
                 session.pop('last_activity', None)
                 flash("Session timed out. Please log in again.")
                 return redirect(url_for('login'))
+
+            # Update the session with remaining time
+            session['remaining_time'] = remaining_time
         session['last_activity'] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     elif request.endpoint not in ['login']:
         return redirect(url_for('login'))
@@ -108,6 +115,9 @@ def dashboard():
                 )
                 data = cursor.fetchall()
 
+        # Pass remaining session time
+        remaining_time = session.get('remaining_time', app.permanent_session_lifetime.total_seconds())
+
         return render_template(
             'dashboard.html',
             greeting_word=greeting["word"],
@@ -117,9 +127,10 @@ def dashboard():
             selected_date=selected_date,
             selected_user=selected_user,
             data=data,
-            session_timeout_ms=app.permanent_session_lifetime.total_seconds() * 1000
+            session_timeout_ms=remaining_time * 1000
         )
     return redirect(url_for('login'))
+
 
 
 @app.route('/logout')
