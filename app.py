@@ -1,7 +1,6 @@
 from flask import *
 from flask_bcrypt import Bcrypt
 import sqlite3
-import os
 from datetime import timedelta, datetime
 import random
 
@@ -9,7 +8,7 @@ app = Flask(__name__)
 bcrypt = Bcrypt(app)
 
 app.secret_key = 'supersecretkey'
-app.permanent_session_lifetime = timedelta(minutes=15)
+app.permanent_session_lifetime = timedelta(minutes=1)
 
 # List of greetings in different languages
 GREETINGS = [
@@ -78,22 +77,50 @@ def login():
 
     return render_template('login.html')
 
-@app.route('/dashboard')
+@app.route('/dashboard', methods=['GET', 'POST'])
 def dashboard():
     if 'user_id' in session:
-        session_timeout_ms = app.permanent_session_lifetime.total_seconds() * 1000
-
-        # Select a random greeting
         greeting = random.choice(GREETINGS)
+        with sqlite3.connect('data.db') as conn:
+            cursor = conn.cursor()
+
+            # Fetch all distinct users from the data table
+            cursor.execute("SELECT DISTINCT ouser FROM order_history")
+            user_list = [row[0] for row in cursor.fetchall()]
+
+            # Initialize variables
+            data = None  # No data on first load
+            selected_date = None
+            selected_user = None
+
+            if request.method == 'POST':
+                selected_date = request.form.get('inp_date', datetime.now().strftime('%Y-%m-%d'))
+                selected_user = request.form.get('inp_user', user_list[0])
+
+                # Fetch all orders before the selected date for the given user
+                cursor.execute(
+                    """
+                    SELECT * FROM order_history
+                    WHERE ouser = ? AND date(odate) < ?
+                    ORDER BY odate DESC
+                    """,
+                    (selected_user, selected_date)
+                )
+                data = cursor.fetchall()
 
         return render_template(
             'dashboard.html',
-            user_id=session['user_id'],
             greeting_word=greeting["word"],
             greeting_language=greeting["language"],
-            session_timeout_ms=session_timeout_ms
+            user_id=session['user_id'],
+            user_list=user_list,
+            selected_date=selected_date,
+            selected_user=selected_user,
+            data=data,
+            session_timeout_ms=app.permanent_session_lifetime.total_seconds() * 1000
         )
     return redirect(url_for('login'))
+
 
 @app.route('/logout')
 def logout():
