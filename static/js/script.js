@@ -18,3 +18,17 @@ function updateTimer() {
 }
 
 const timerInterval = setInterval(updateTimer, 1000);
+
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.update-ltp').forEach(button => {
+        button.addEventListener('click', () => {
+            alert('Update LTP clicked!');
+        });
+    });
+
+    document.querySelectorAll('.square-off').forEach(button => {
+        button.addEventListener('click', () => {
+            alert('Square-off clicked!');
+        });
+    });
+});
