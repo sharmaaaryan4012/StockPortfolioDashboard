@@ -54,8 +54,9 @@
                     <th>Order Status</th>
                     <th>Quantity</th>
                     <th>Buy Price</th>
-                    <th>LTP</th>
+                    <th>Last Trade Price</th>
                     <th>Profit/Loss</th>
+                    <th>Profit/Loss %</th>
                     <th>OCO Order No.</th>
                     <th>OCO Status</th>
                     <th>Overall Status</th>
@@ -63,14 +64,15 @@
             </thead>
             <tbody>
                 {% for row in data %}
-                <tr>
-                    {% for col in row %}
+                <tr class="{{ row[-1] }}">
+                    {% for col in row[:-1] %}
                     <td>{{ col }}</td>
                     {% endfor %}
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
+
         {% else %}
         <div class="no-data-message">
             <p>Please select your preferences to view the data.</p>
