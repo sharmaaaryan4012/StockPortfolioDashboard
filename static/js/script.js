@@ -32,3 +32,43 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
+function sortTable(columnIndex, isNumeric = false) {
+    const table = document.querySelector(".data-table tbody");
+    const rows = Array.from(table.rows);
+
+    const sortedRows = rows.sort((a, b) => {
+        const cellA = a.cells[columnIndex].innerText.trim();
+        const cellB = b.cells[columnIndex].innerText.trim();
+
+        if (isNumeric) {
+            const numA = parseFloat(cellA.replace(/[+%]/g, ""));
+            const numB = parseFloat(cellB.replace(/[+%]/g, ""));
+            return numA - numB;
+        } else {
+            return cellA.localeCompare(cellB);
+        }
+    });
+
+    table.innerHTML = "";
+    sortedRows.forEach(row => table.appendChild(row));
+}
+
+let originalTableRows = [];
+
+// Store original table rows on page load
+document.addEventListener('DOMContentLoaded', () => {
+    const table = document.querySelector(".data-table tbody");
+    if (table) {
+        originalTableRows = Array.from(table.rows).map(row => row.cloneNode(true));
+    }
+});
+
+// Reset table to its original order
+function resetTable() {
+    const table = document.querySelector(".data-table tbody");
+    if (table && originalTableRows.length > 0) {
+        table.innerHTML = ""; // Clear current rows
+        originalTableRows.forEach(row => table.appendChild(row)); // Restore original rows
+    }
+}
