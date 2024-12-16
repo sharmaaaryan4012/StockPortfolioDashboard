@@ -8,7 +8,7 @@ app = Flask(__name__)
 bcrypt = Bcrypt(app)
 
 app.secret_key = 'supersecretkey'
-app.permanent_session_lifetime = timedelta(minutes=1)
+app.permanent_session_lifetime = timedelta(minutes=15)
 
 # List of greetings in different languages
 GREETINGS = [
@@ -107,13 +107,44 @@ def dashboard():
                 # Fetch all orders before the selected date for the given user
                 cursor.execute(
                     """
-                    SELECT * FROM order_history
+                    SELECT ouser, odate, osymbol, oon, ostatus, oquantity, obp, oltp,
+                        ROUND(oltp - obp, 2) AS profit_loss,
+                        ROUND(((oltp - obp) / obp) * 100, 2) AS profit_loss_percent,
+                        ocon, ocostatus, ollstatus
+                    FROM order_history
                     WHERE ouser = ? AND date(odate) < ?
                     ORDER BY odate DESC
                     """,
                     (selected_user, selected_date)
                 )
                 data = cursor.fetchall()
+
+                formatted_data = []  # Formatting profit/loss and adding highlight classes
+                for row in data:
+                    row = list(row)
+
+                    if row[8] > 0:
+                        row[8] = f"+{row[8]:.2f}"
+                    else:
+                        row[8] = f"{row[8]:.2f}"
+
+                    if row[9] > 0:
+                        row[9] = f"+{row[9]:.2f}%"
+                    else:
+                        row[9] = f"{row[9]:.2f}%"
+
+                    # Add a highlight class based on profit_loss_percent value
+                    percent_value = float(row[9].replace('%', '').replace('+', ''))
+                    if percent_value >= 5:
+                        row.append('green-highlight')  # Positive threshold met
+                    elif percent_value <= -5:
+                        row.append('red-highlight')  # Negative threshold met
+                    else:
+                        row.append('')  # No highlight
+
+                    formatted_data.append(row)
+
+                data = formatted_data
 
         # Pass remaining session time
         remaining_time = session.get('remaining_time', app.permanent_session_lifetime.total_seconds())
@@ -130,8 +161,6 @@ def dashboard():
             session_timeout_ms=remaining_time * 1000
         )
     return redirect(url_for('login'))
-
-
 
 @app.route('/logout')
 def logout():
