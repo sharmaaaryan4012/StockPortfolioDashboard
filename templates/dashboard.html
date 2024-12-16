@@ -8,6 +8,31 @@
     <script>
         const sessionTimeoutMs = {{ session_timeout_ms | safe }};
     </script>
+    <script>
+        // JavaScript for sorting table
+        function sortTable(columnIndex, isNumeric = false) {
+            const table = document.querySelector(".data-table tbody");
+            const rows = Array.from(table.rows);
+
+            // Sort rows based on the selected column
+            const sortedRows = rows.sort((a, b) => {
+                const cellA = a.cells[columnIndex].innerText.trim();
+                const cellB = b.cells[columnIndex].innerText.trim();
+
+                if (isNumeric) {
+                    const numA = parseFloat(cellA.replace(/[+%]/g, ""));
+                    const numB = parseFloat(cellB.replace(/[+%]/g, ""));
+                    return numA - numB;
+                } else {
+                    return cellA.localeCompare(cellB);
+                }
+            });
+
+            // Remove existing rows and append sorted rows
+            table.innerHTML = "";
+            sortedRows.forEach(row => table.appendChild(row));
+        }
+    </script>
     <script src="{{ url_for('static', filename='js/script.js') }}" defer></script>
 </head>
 
@@ -22,7 +47,6 @@
             <div id="timeout-timer" class="timeout-timer">Timeout: --:--</div>
         </div>
     </header>
-
 
     <main>
         <div class="greeting">
@@ -41,26 +65,29 @@
             </select>
 
             <button type="submit" class="submit-btn">View</button>
+            <button type="button" class="submit-btn" onclick="resetTable()">Reset</button>
         </form>
 
         {% if data %}
         <table class="data-table">
             <thead>
-                <tr>
-                    <th>User</th>
-                    <th>Date</th>
-                    <th>Symbol</th>
-                    <th>Order No.</th>
-                    <th>Order Status</th>
-                    <th>Quantity</th>
-                    <th>Buy Price</th>
-                    <th>Last Trade Price</th>
-                    <th>Profit/Loss</th>
-                    <th>Profit/Loss %</th>
-                    <th>OCO Order No.</th>
-                    <th>OCO Status</th>
-                    <th>Overall Status</th>
-                </tr>
+            <tr>
+                <th class="sortable" onclick="sortTable(0)">User</th>
+                <th class="sortable" onclick="sortTable(1)">Date</th>
+                <th class="sortable" onclick="sortTable(2)">Symbol</th>
+                <th>Order No.</th>
+                <th>Order Status</th>
+<!--                <th>Quantity</th>-->
+                <th class="sortable" onclick="sortTable(5, true)">Quantity</th>
+                <th>Buy Price</th>
+                <th>Last Trade Price</th>
+                <th class="sortable" onclick="sortTable(8, true)">Profit/Loss</th>
+                <th class="sortable" onclick="sortTable(9, true)">Profit/Loss %</th>
+                <th>OCO Order No.</th>
+                <th>OCO Status</th>
+                <th class="sortable" onclick="sortTable(12)">Overall Status</th>
+                <th></th>
+            </tr>
             </thead>
             <tbody>
                 {% for row in data %}
@@ -68,6 +95,9 @@
                     {% for col in row[:-1] %}
                     <td>{{ col }}</td>
                     {% endfor %}
+                    <td>
+                        <button class="square-off-btn" onclick="squareOff()">Square-off</button>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -79,7 +109,6 @@
         </div>
         {% endif %}
     </main>
-
 
     <footer>
         <img src="{{ url_for('static', filename='images/motto.jpg') }}" alt="Motto">
