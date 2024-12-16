@@ -10,6 +10,7 @@ body {
     flex-direction: column;
     min-height: 100vh;
     margin: 0;
+    overflow-x: hidden;
     background: linear-gradient(to bottom, #DFF5F0, #C1E8DB);
     font-family: Arial, sans-serif;
 }
@@ -249,6 +250,8 @@ body {
     width: 90%;
     margin: auto;
     border-collapse: collapse;
+    font-size: 14px;
+    text-align: center;
     background-color: #FFFFFF;
     border-radius: 10px;
     overflow: hidden;
@@ -297,6 +300,13 @@ body {
     background-color: #f9f9f9;
 }
 
+.data-table td {
+    background-color: inherit;
+    color: inherit;
+    text-align: center;
+    padding: 10px;
+}
+
 /* Default message for Data Table */
 .no-data-message {
     text-align: center;
@@ -304,4 +314,15 @@ body {
     font-weight: bold;
     color: #4CAF50;
     margin: 20px 0;
+}
+
+/* Highlight rows for significant profit/loss percentages */
+.green-highlight, .green-highlight td {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.red-highlight, .red-highlight td {
+    background-color: #f8d7da;
+    color: #721c24;
 }
