@@ -37,6 +37,7 @@ function sortTable(columnIndex, isNumeric = false) {
     const table = document.querySelector(".data-table tbody");
     const rows = Array.from(table.rows);
 
+    // Sort rows based on the selected column
     const sortedRows = rows.sort((a, b) => {
         const cellA = a.cells[columnIndex].innerText.trim();
         const cellB = b.cells[columnIndex].innerText.trim();
@@ -50,6 +51,7 @@ function sortTable(columnIndex, isNumeric = false) {
         }
     });
 
+    // Remove existing rows and append sorted rows
     table.innerHTML = "";
     sortedRows.forEach(row => table.appendChild(row));
 }
@@ -72,3 +74,26 @@ function resetTable() {
         originalTableRows.forEach(row => table.appendChild(row)); // Restore original rows
     }
 }
+
+
+// document.addEventListener("DOMContentLoaded", () => {
+//     function updateLTP() {
+//         fetch("/update_ltp")
+//             .then(response => response.json())
+//             .then(updatedPrices => {
+//                 const tableRows = document.querySelectorAll(".data-table tbody tr");
+//                 tableRows.forEach(row => {
+//                     const orderNoCell = row.cells[3];
+//                     const ltpCell = row.cells[6];
+//
+//                     const orderNo = orderNoCell.textContent.trim();
+//                     if (updatedPrices[orderNo]) {
+//                         ltpCell.textContent = updatedPrices[orderNo];
+//                     }
+//                 });
+//             })
+//             .catch(err => console.error("Error updating prices:", err));
+//     }
+//
+//     setInterval(updateLTP, 60000);
+// });
