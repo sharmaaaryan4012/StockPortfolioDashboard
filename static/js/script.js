@@ -1,5 +1,9 @@
 let timeoutSeconds = Math.floor(sessionTimeoutMs / 1000);
+let inactivitySeconds = 300; // Inactivity timer
+let isInactive = false; // Track whether the user is inactive
+let inactivityInterval;
 
+// Regular timer function
 function updateTimer() {
     const minutes = Math.floor(timeoutSeconds / 60);
     const seconds = timeoutSeconds % 60;
@@ -17,7 +21,59 @@ function updateTimer() {
     }
 }
 
-const timerInterval = setInterval(updateTimer, 1000);
+// Inactivity timer function
+function updateInactivityTimer() {
+    const minutes = Math.floor(inactivitySeconds / 60);
+    const seconds = inactivitySeconds % 60;
+    const timerElement = document.getElementById('timeout-timer');
+    if (timerElement) {
+        timerElement.textContent = `Inactivity: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    }
+
+    if (inactivitySeconds > 0) {
+        inactivitySeconds--;
+    } else {
+        clearInterval(inactivityInterval);
+        alert("Inactivity timer expired. You will be logged out.");
+        window.location.href = "/logout";
+    }
+}
+
+// Switch to inactivity timer
+function startInactivityTimer() {
+    isInactive = true;
+    clearInterval(timerInterval);
+    inactivitySeconds = 300; // Reset inactivity timer
+    inactivityInterval = setInterval(updateInactivityTimer, 1000);
+}
+
+// Resume regular timer on activity
+function resumeRegularTimer() {
+    if (isInactive) {
+        isInactive = false;
+        clearInterval(inactivityInterval); // Stop the inactivity timer
+        timerInterval = setInterval(updateTimer, 1000); // Resume the regular timer
+    }
+}
+
+// Detect user activity
+document.addEventListener('mousemove', resumeRegularTimer);
+document.addEventListener('keypress', resumeRegularTimer);
+
+// Start regular timer
+let timerInterval = setInterval(updateTimer, 1000);
+
+// Detect inactivity
+let inactivityTimeout = setTimeout(startInactivityTimer, 10000); // 30 seconds inactivity
+
+function resetInactivityTimeout() {
+    clearTimeout(inactivityTimeout);
+    inactivityTimeout = setTimeout(startInactivityTimer, 30000);
+}
+
+// Reset inactivity timer on activity
+document.addEventListener('mousemove', resetInactivityTimeout);
+document.addEventListener('keypress', resetInactivityTimeout);
 
 document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.update-ltp').forEach(button => {
@@ -33,6 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+// Sort table function
 function sortTable(columnIndex, isNumeric = false) {
     const table = document.querySelector(".data-table tbody");
     const rows = Array.from(table.rows);
@@ -51,14 +108,13 @@ function sortTable(columnIndex, isNumeric = false) {
         }
     });
 
-    // Remove existing rows and append sorted rows
     table.innerHTML = "";
     sortedRows.forEach(row => table.appendChild(row));
 }
 
+// Store original table rows on page load
 let originalTableRows = [];
 
-// Store original table rows on page load
 document.addEventListener('DOMContentLoaded', () => {
     const table = document.querySelector(".data-table tbody");
     if (table) {
@@ -74,7 +130,6 @@ function resetTable() {
         originalTableRows.forEach(row => table.appendChild(row)); // Restore original rows
     }
 }
-
 
 // document.addEventListener("DOMContentLoaded", () => {
 //     function updateLTP() {
