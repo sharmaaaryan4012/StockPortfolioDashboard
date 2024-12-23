@@ -1,3 +1,11 @@
+/*
+    Author: Aaryan Sharma
+    Date: December 2024
+    Project: Stock Portfolio Dashboard
+    File: styles.css
+*/
+
+/* Global Reset */
 * {
     margin: 0;
     padding: 0;
@@ -15,7 +23,7 @@ body {
     font-family: Arial, sans-serif;
 }
 
-/* Background patterns */
+/* Background Patterns */
 .background-pattern {
     position: absolute;
     width: 100%;
@@ -47,7 +55,7 @@ body {
     background: rgba(255, 255, 255, 0.3);
 }
 
-/* Header and footer styling */
+/* Header and Footer */
 header, footer {
     display: flex;
     position: relative;
@@ -71,7 +79,7 @@ footer img {
     height: 20px;
 }
 
-/* Main content */
+/* Main Content */
 main {
     display: block;
     padding: 20px;
@@ -98,6 +106,7 @@ main {
     color: gray;
 }
 
+/* Data Display Box */
 .data-box {
     flex-grow: 1;
     width: 90%;
@@ -114,51 +123,50 @@ main {
     margin: 20px 0;
 }
 
-/* Logout Container - Button + Timer */
-
+/* Logout Button and Timer */
 .logout-btn {
-  position: relative;
-  font-family: 'Arial', sans-serif;
-  font-weight: 600;
-  font-size: 16px;
-  letter-spacing: 0.05em;
-  border-radius: 0.8em;
-  cursor: pointer;
-  border: none;
-  background: linear-gradient(to right, #4caf50, #45a049);
-  color: white;
-  overflow: hidden;
-  padding: 0.8em 1.2em;
-  text-align: center;
-  display: inline-block;
-  width: auto;
+    position: relative;
+    font-family: 'Arial', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    letter-spacing: 0.05em;
+    border-radius: 0.8em;
+    cursor: pointer;
+    border: none;
+    background: linear-gradient(to right, #4caf50, #45a049);
+    color: white;
+    overflow: hidden;
+    padding: 0.8em 1.2em;
+    text-align: center;
+    display: inline-block;
+    width: auto;
 }
 
 .logout-btn span {
-  position: relative;
-  z-index: 10;
-  transition: color 0.4s;
-  display: inline-block;
+    position: relative;
+    z-index: 10;
+    transition: color 0.4s;
+    display: inline-block;
 }
 
 .logout-btn::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 120%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.1);
-  transform: skew(30deg);
-  transition: transform 0.4s cubic-bezier(0.3, 1, 0.8, 1);
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 120%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.1);
+    transform: skew(30deg);
+    transition: transform 0.4s cubic-bezier(0.3, 1, 0.8, 1);
 }
 
 .logout-btn:hover::before {
-  transform: translate3d(100%, 0, 0);
+    transform: translate3d(100%, 0, 0);
 }
 
 .logout-btn:active {
-  transform: scale(0.95);
+    transform: scale(0.95);
 }
 
 .logout-container {
@@ -174,19 +182,12 @@ main {
     font-family: Arial, sans-serif;
 }
 
-/* Data Viewer */
-
-body {
-    background: linear-gradient(to bottom, #DFF5F0, #C1E8DB);
-    font-family: Arial, sans-serif;
-}
-
-/* Filter Bar */
+/* Filter Bar Styling */
 .filter-form {
     display: flex;
     gap: 20px;
     justify-content: center;
-    align-items: center; /* Vertically aligns text and input fields */
+    align-items: center;
     margin: 20px 0;
 }
 
@@ -197,7 +198,8 @@ body {
     margin-right: 10px;
 }
 
-.filter-form input, .filter-form select {
+.filter-form input,
+.filter-form select {
     position: relative;
     padding: 8px 10px;
     font-size: 14px;
@@ -207,6 +209,7 @@ body {
     z-index: 1;
 }
 
+/* Submit Button for Filters */
 .filter-form .submit-btn {
     position: relative;
     font-family: 'Arial', sans-serif;
@@ -245,7 +248,7 @@ body {
     transform: scale(0.95);
 }
 
-/* Data Table */
+/* Data Table Styling */
 .data-table {
     width: 90%;
     margin: auto;
@@ -258,7 +261,8 @@ body {
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
-.data-table th, .data-table td {
+.data-table th,
+.data-table td {
     padding: 10px;
     text-align: left;
     border-bottom: 1px solid #CCCCCC;
@@ -274,49 +278,12 @@ body {
     background-color: #F9F9F9;
 }
 
-.data-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 20px 0;
-    background: #ffffff;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-}
-
-.data-table th, .data-table td {
-    padding: 10px;
-    text-align: left;
-    border-bottom: 1px solid #dddddd;
-}
-
-.data-table th {
-    background-color: #4CAF50;
-    color: white;
-    text-align: left;
-}
-
-.data-table tr:nth-child(even) {
-    background-color: #f9f9f9;
-}
-
 .data-table td {
-    background-color: inherit;
-    color: inherit;
     text-align: center;
     padding: 10px;
 }
 
-/* Default message for Data Table */
-.no-data-message {
-    text-align: center;
-    font-size: 18px;
-    font-weight: bold;
-    color: #4CAF50;
-    margin: 20px 0;
-}
-
-/* Highlight rows for significant profit/loss percentages */
+/* Row Highlighting for Profit/Loss */
 .green-highlight, .green-highlight td {
     background-color: #d4edda;
     color: #155724;
@@ -327,7 +294,7 @@ body {
     color: #721c24;
 }
 
-/* Sorting the table */
+/* Sortable Headers */
 th.sortable {
     cursor: pointer;
     position: relative;
@@ -343,6 +310,7 @@ th.sortable:hover {
     color: #4CAF50;
 }
 
+/* Square-off Button */
 .square-off-btn {
     position: relative;
     font-family: 'Arial', sans-serif;
