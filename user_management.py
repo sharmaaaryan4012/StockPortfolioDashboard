@@ -1,8 +1,16 @@
+'''
+    Author: Aaryan Sharma
+    Date: December 2024
+    Project: Stock Portfolio Dashboard
+    File: user_management.py
+'''
+
 import re
 import sqlite3
 from flask_bcrypt import Bcrypt
 
 bcrypt = Bcrypt()
+
 
 def init_db():
     """Initialize the database and create the credentials table if it doesn't exist."""
@@ -13,6 +21,7 @@ def init_db():
                             user_id TEXT UNIQUE NOT NULL,
                             hashed_password TEXT NOT NULL)''')
         conn.commit()
+
 
 def validate_password(password):
     """Validate the password for complexity."""
@@ -25,17 +34,20 @@ def validate_password(password):
         return False
     return True
 
+
 def validate_user_id(user_id):
     """Validate the user ID to ensure it's an email or phone number."""
     email_regex = r'^[\w\.-]+@[\w\.-]+\.\w+$'
     phone_regex = r'^\+?\d{10,15}$'
     return re.match(email_regex, user_id) or re.match(phone_regex, user_id)
 
+
 def add_user(user_id, password):
     """Add a new user with a hashed password."""
     if not validate_user_id(user_id):
         print("Invalid User ID. It must be a valid email or phone number.")
         return
+
     if not validate_password(password):
         print("Invalid Password. It must be at least 8 characters, contain mixed case, numbers, and one of the following special characters: #$^")
         return
@@ -50,6 +62,7 @@ def add_user(user_id, password):
         except sqlite3.IntegrityError:
             print(f"User {user_id} already exists.")
 
+
 def remove_user(user_id):
     """Remove a user by their user ID."""
     with sqlite3.connect('data.db') as conn:
@@ -60,6 +73,7 @@ def remove_user(user_id):
             print(f"User {user_id} removed successfully.")
         else:
             print(f"User {user_id} does not exist.")
+
 
 def reset_password(user_id, new_password):
     """Reset the password for an existing user."""
@@ -77,6 +91,7 @@ def reset_password(user_id, new_password):
         else:
             print(f"User {user_id} does not exist.")
 
+
 def view_users():
     """View the contents of the credentials table."""
     with sqlite3.connect('data.db') as conn:
@@ -89,6 +104,7 @@ def view_users():
                 print(f"ID: {user[0]}, User ID: {user[1]}")
         else:
             print("\nNo users found in the database.")
+
 
 def main():
     """CLI Menu to manage users."""
@@ -120,6 +136,7 @@ def main():
             break
         else:
             print("Invalid choice. Please try again.")
+
 
 if __name__ == "__main__":
     main()
