@@ -1,13 +1,19 @@
+<!--
+    Author: Aaryan Sharma
+    Date: December 2024
+    Project: Stock Portfolio Dashboard
+    File: login.html
+-->
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
 
-    <!--
-    I was unable to use "url_for" for the login.html file, therefore, I am not using the styles.css file.
-    -->
+    <!-- I was unable to use "url_for" for the login.html file, therefore, I am not using the styles.css file. -->
 
     <style>
         * {
@@ -92,53 +98,54 @@
         }
 
         .login-container .login-button {
-        position: relative;
-        font-family: 'Arial', sans-serif;
-        font-weight: 600;
-        font-size: 16px;
-        letter-spacing: 0.05em;
-        border-radius: 0.8em;
-        cursor: pointer;
-        border: none;
-        background: linear-gradient(to right, #4caf50, #45a049);
-        color: white;
-        overflow: hidden;
-        padding: 0.8em 1.2em;
-        text-align: center;
-        display: inline-block;
-        width: 100%;
-        margin-top: 20px;
-        transition: all 0.4s ease;
-    }
+            position: relative;
+            font-family: 'Arial', sans-serif;
+            font-weight: 600;
+            font-size: 16px;
+            letter-spacing: 0.05em;
+            border-radius: 0.8em;
+            cursor: pointer;
+            border: none;
+            background: linear-gradient(to right, #4caf50, #45a049);
+            color: white;
+            overflow: hidden;
+            padding: 0.8em 1.2em;
+            text-align: center;
+            display: inline-block;
+            width: 100%;
+            margin-top: 20px;
+            transition: all 0.4s ease;
+        }
 
-    .login-container .login-button span {
-        position: relative;
-        z-index: 10;
-        transition: color 0.4s;
-        display: inline-block;
-    }
+        .login-container .login-button span {
+            position: relative;
+            z-index: 10;
+            transition: color 0.4s;
+            display: inline-block;
+        }
 
-    .login-container .login-button::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 120%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.1);
-        transform: skew(30deg);
-        transition: transform 0.4s cubic-bezier(0.3, 1, 0.8, 1);
-    }
+        .login-container .login-button::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 120%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.1);
+            transform: skew(30deg);
+            transition: transform 0.4s cubic-bezier(0.3, 1, 0.8, 1);
+        }
 
-    .login-container .login-button:hover::before {
-        transform: translate3d(100%, 0, 0);
-    }
+        .login-container .login-button:hover::before {
+            transform: translate3d(100%, 0, 0);
+        }
 
-    .login-container .login-button:active {
-        transform: scale(0.95);
-    }
+        .login-container .login-button:active {
+            transform: scale(0.95);
+        }
     </style>
 </head>
+
 <body>
     <div class="background-pattern"></div>
     <div class="login-container">
@@ -154,4 +161,5 @@
         <div class="decoration-2"></div>
     </div>
 </body>
+
 </html>
