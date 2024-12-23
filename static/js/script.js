@@ -1,13 +1,22 @@
+/*
+    Author: Aaryan Sharma
+    Date: December 2024
+    Project: Stock Portfolio Dashboard
+    File: script.js
+*/
+
+// Global variables for session and inactivity timers
 let timeoutSeconds = Math.floor(sessionTimeoutMs / 1000);
 let inactivitySeconds = 300; // Inactivity timer
 let isInactive = false; // Track whether the user is inactive
 let inactivityInterval;
 
-// Regular timer function
+// Regular session timer function
 function updateTimer() {
     const minutes = Math.floor(timeoutSeconds / 60);
     const seconds = timeoutSeconds % 60;
     const timerElement = document.getElementById('timeout-timer');
+
     if (timerElement) {
         timerElement.textContent = `Timeout: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
     }
@@ -26,6 +35,7 @@ function updateInactivityTimer() {
     const minutes = Math.floor(inactivitySeconds / 60);
     const seconds = inactivitySeconds % 60;
     const timerElement = document.getElementById('timeout-timer');
+
     if (timerElement) {
         timerElement.textContent = `Inactivity: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
     }
@@ -42,46 +52,49 @@ function updateInactivityTimer() {
 // Switch to inactivity timer
 function startInactivityTimer() {
     isInactive = true;
-    clearInterval(timerInterval);
+    clearInterval(timerInterval); // Stop the regular timer
     inactivitySeconds = 300; // Reset inactivity timer
     inactivityInterval = setInterval(updateInactivityTimer, 1000);
 }
 
-// Resume regular timer on activity
+// Resume regular session timer on activity
 function resumeRegularTimer() {
     if (isInactive) {
         isInactive = false;
-        clearInterval(inactivityInterval); // Stop the inactivity timer
-        timerInterval = setInterval(updateTimer, 1000); // Resume the regular timer
+        clearInterval(inactivityInterval); // Stop inactivity timer
+        timerInterval = setInterval(updateTimer, 1000); // Resume regular timer
     }
 }
 
-// Detect user activity
+// Event listeners for detecting user activity
 document.addEventListener('mousemove', resumeRegularTimer);
 document.addEventListener('keypress', resumeRegularTimer);
 
-// Start regular timer
+// Start regular session timer
 let timerInterval = setInterval(updateTimer, 1000);
 
-// Detect inactivity
-let inactivityTimeout = setTimeout(startInactivityTimer, 10000); // 30 seconds inactivity
+// Detect inactivity after a specific duration
+let inactivityTimeout = setTimeout(startInactivityTimer, 30000); // 30 seconds inactivity
 
+// Reset inactivity timeout on user activity
 function resetInactivityTimeout() {
     clearTimeout(inactivityTimeout);
     inactivityTimeout = setTimeout(startInactivityTimer, 30000);
 }
 
-// Reset inactivity timer on activity
 document.addEventListener('mousemove', resetInactivityTimeout);
 document.addEventListener('keypress', resetInactivityTimeout);
 
+// Initialize button actions when the DOM content is loaded
 document.addEventListener('DOMContentLoaded', () => {
+    // Add click event for "Update LTP" buttons
     document.querySelectorAll('.update-ltp').forEach(button => {
         button.addEventListener('click', () => {
             alert('Update LTP clicked!');
         });
     });
 
+    // Add click event for "Square-off" buttons
     document.querySelectorAll('.square-off').forEach(button => {
         button.addEventListener('click', () => {
             alert('Square-off clicked!');
@@ -89,12 +102,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// Sort table function
+// Sort table rows based on column content
 function sortTable(columnIndex, isNumeric = false) {
     const table = document.querySelector(".data-table tbody");
     const rows = Array.from(table.rows);
 
-    // Sort rows based on the selected column
     const sortedRows = rows.sort((a, b) => {
         const cellA = a.cells[columnIndex].innerText.trim();
         const cellB = b.cells[columnIndex].innerText.trim();
@@ -108,11 +120,11 @@ function sortTable(columnIndex, isNumeric = false) {
         }
     });
 
-    table.innerHTML = "";
-    sortedRows.forEach(row => table.appendChild(row));
+    table.innerHTML = ""; // Clear table content
+    sortedRows.forEach(row => table.appendChild(row)); // Append sorted rows
 }
 
-// Store original table rows on page load
+// Store the original table rows for reset functionality
 let originalTableRows = [];
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -125,30 +137,9 @@ document.addEventListener('DOMContentLoaded', () => {
 // Reset table to its original order
 function resetTable() {
     const table = document.querySelector(".data-table tbody");
+
     if (table && originalTableRows.length > 0) {
         table.innerHTML = ""; // Clear current rows
         originalTableRows.forEach(row => table.appendChild(row)); // Restore original rows
     }
 }
-
-// document.addEventListener("DOMContentLoaded", () => {
-//     function updateLTP() {
-//         fetch("/update_ltp")
-//             .then(response => response.json())
-//             .then(updatedPrices => {
-//                 const tableRows = document.querySelectorAll(".data-table tbody tr");
-//                 tableRows.forEach(row => {
-//                     const orderNoCell = row.cells[3];
-//                     const ltpCell = row.cells[6];
-//
-//                     const orderNo = orderNoCell.textContent.trim();
-//                     if (updatedPrices[orderNo]) {
-//                         ltpCell.textContent = updatedPrices[orderNo];
-//                     }
-//                 });
-//             })
-//             .catch(err => console.error("Error updating prices:", err));
-//     }
-//
-//     setInterval(updateLTP, 60000);
-// });
