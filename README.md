@@ -22,7 +22,6 @@ This dashboard application is built to help users interact with stock order data
 - **Session Management**: Automatic session timeout with visual countdown.
 - **Order Filtering**: View stock orders filtered by date and user.
 - **Custom Greetings**: Multi-language greetings based on session user.
-- **Responsive Design**: Adaptable UI for both desktop and mobile devices.
 - **Custom Branding**: Replaceable logos and footer images to reflect your organization's identity.
 
 ## Project Structure
