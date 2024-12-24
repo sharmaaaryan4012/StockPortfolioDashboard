@@ -70,31 +70,7 @@ pip install flask flask-bcrypt
 
 ### Creating/Managing Users
 
-Use `user_management.py` to add users to the `data.db` database. Below is an example snippet:
-
-```python
-import sqlite3
-from flask_bcrypt import Bcrypt
-
-bcrypt = Bcrypt()
-
-# Connect to the database
-conn = sqlite3.connect('data.db')
-cursor = conn.cursor()
-
-# Add a new user
-user_id = "example_user"
-password = "secure_password"
-hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
-
-cursor.execute("INSERT INTO credentials (user_id, hashed_password) VALUES (?, ?)", (user_id, hashed_password))
-conn.commit()
-conn.close()
-
-print("User created successfully!")
-```
-
-Run this script to add user credentials.
+Run the `user_management.py` to manage and add users to the database in order to log in to the dashboard.
 
 ### Running the Web Application
 
