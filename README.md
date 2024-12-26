@@ -1,6 +1,7 @@
 # Stock Portfolio Dashboard
 
 This project is a web-based application that enables users to manage stock orders, monitor session activity, and filter order history effectively. It is an adaptation of a custom dashboard I developed while working with a startup to streamline their stock and order management processes. The project has been refined and generalized to serve a broader audience with similar needs.
+[**Watch a video walkthrough of the project**](https://youtu.be/d1HKRsfV5hc)
 
 ## Table of Contents
 
