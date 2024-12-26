@@ -10,92 +10,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
-
-    <!-- Link external CSS and JavaScript -->
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
+    <title>Dashboard</title>
     <script>
-        // Pass session timeout value to JavaScript
         const sessionTimeoutMs = {{ session_timeout_ms | safe }};
     </script>
     <script src="{{ url_for('static', filename='js/script.js') }}" defer></script>
 </head>
 
 <body>
-    <!-- Background decoration -->
-    <div class="background-pattern"></div>
+<div class="background-pattern"></div>
+<header>
+    <img src="{{ url_for('static', filename='images/logo.jpg') }}" alt="{Place your logo here.}">
+    <div class="logout-container">
+        <button class="logout-btn" onclick="window.location.href='{{ url_for('logout') }}'">
+            <span>Logout</span>
+        </button>
+        <div id="timeout-timer" class="timeout-timer">Timeout: --:--</div>
+    </div>
+</header>
 
-    <!-- Header with logo and logout -->
-    <header>
-        <img src="{{ url_for('static', filename='images/logo.jpg') }}" alt="Place your logo here">
-        <div class="logout-container">
-            <button class="logout-btn" onclick="window.location.href='{{ url_for('logout') }}'">
-                <span>Logout</span>
-            </button>
-            <div id="timeout-timer" class="timeout-timer">Timeout: --:--</div>
-        </div>
-    </header>
+<main>
+    <div class="greeting">
+        <h1>{{greeting_word}}, {{ user_id }}!</h1>
+        <p>That's how you say hello in {{ greeting_language }}.</p>
+    </div>
+    <form method="POST" action="{{ url_for('dashboard') }}" class="filter-form">
+        <label for="inp_date">Select Date:</label>
+        <input type="date" id="inp_date" name="inp_date" value="{{ selected_date }}">
 
-    <!-- Main content -->
-    <main>
-        <!-- Greeting message -->
-        <div class="greeting">
-            <h1>{{ greeting_word }}, {{ user_id }}!</h1>
-            <p>That's how you say hello in {{ greeting_language }}.</p>
-        </div>
+        <label for="inp_user">Select User:</label>
+        <select id="inp_user" name="inp_user">
+            {% for user in user_list %}
+            <option value="{{ user }}" {% if user== selected_user %}selected{% endif %}>{{ user }}</option>
+            {% endfor %}
+        </select>
 
-        <!-- Filters form -->
-        <form method="POST" action="{{ url_for('dashboard') }}" class="filter-form">
-            <label for="inp_date">Select Date:</label>
-            <input type="date" id="inp_date" name="inp_date" value="{{ selected_date }}">
-
-            <label for="inp_user">Select User:</label>
-            <select id="inp_user" name="inp_user">
-                {% for user in user_list %}
-                    <option value="{{ user }}" {% if user == selected_user %}selected{% endif %}>{{ user }}</option>
-                {% endfor %}
-            </select>
-
-            <button type="submit" class="submit-btn">View</button>
+        <button type="submit" class="submit-btn">View</button>
+        <button type="button" class="submit-btn" onclick="resetTable()">Reset</button>
+        <button type="submit" class="submit-btn">Update</button>
         </form>
 
-        <!-- Display table if data exists -->
         {% if data %}
         <table class="data-table">
             <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>User</th>
-                    <th>Symbol</th>
-                    <th>Order No.</th>
-                    <th>Order Status</th>
-                    <th>Buy Price</th>
-                    <th>LTP</th>
-                    <th>Profit/Loss</th>
-                    <th>Profit/Loss %</th>
-                </tr>
+            <tr>
+                <th class="sortable" onclick="sortTable(0)">Date</th>
+                <th class="sortable" onclick="sortTable(1)">User</th>
+                <th class="sortable" onclick="sortTable(2)">Symbol</th>
+                <th>Order No.</th>
+                <th>Order Status</th>
+                <th>Buy Price</th>
+                <th>Last Trade Price</th>
+                <th class="sortable" onclick="sortTable(7, true)">Profit/Loss</th>
+                <th class="sortable" onclick="sortTable(8, true)">Profit/Loss %</th>
+                <th class="sortable" onclick="sortTable(9, true)">Quantity</th>
+                <th>OCO Order No.</th>
+                <th>OCO Status</th>
+                <th>Overall Status</th>
+                <th></th>
+            </tr>
             </thead>
             <tbody>
                 {% for row in data %}
                 <tr class="{{ row[-1] }}">
                     {% for col in row[:-1] %}
-                        <td>{{ col }}</td>
+                    <td>{{ col }}</td>
                     {% endfor %}
+                    <td>
+                        <button class="square-off-btn">Square-off</button>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
+
+
         {% else %}
-        <!-- Message if no data -->
         <div class="no-data-message">
             <p>Please select your preferences to view the data.</p>
         </div>
         {% endif %}
     </main>
 
-    <!-- Footer -->
     <footer>
-        <img src="{{ url_for('static', filename='images/motto.jpg') }}" alt="Place your motto/footer here">
+        <img src="{{ url_for('static', filename='images/motto.jpg') }}" alt="Place your footer here.">
     </footer>
 </body>
 </html>
